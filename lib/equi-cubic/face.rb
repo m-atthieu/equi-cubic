@@ -7,8 +7,25 @@ class Face < Plan
     end
     
     def to_p x, y
-        
-        return Point.new @size / 2, -@size / 2 + x, @size / 2 + y
+        if @center.x != 0 then
+          if @center.x >= 0 then
+            return Point.new @size / 2, @size / 2 - x, @size / 2 - y
+          else
+            return Point.new -@size / 2, -@size / 2 + x, @size / 2 - y
+          end
+        elsif @center.y != 0 then
+          if @center.y >= 0 then
+            return Point.new -@size / 2 + x, @size / 2, @size / 2 - y
+          else
+            return Point.new @size / 2 - x, -@size / 2, @size / 2 - y
+          end
+        else
+          if @center.z >= 0 then
+            return Point.new -@size / 2 + y, @size / 2 - x, @size / 2
+          else
+            return Point.new @size / 2 - y, @size / 2 - x, - @size / 2
+          end
+        end
     end
     
     @@face_point = {
