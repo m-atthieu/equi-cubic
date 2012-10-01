@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
+
+require 'rubygems'
+require 'rmagick'
+require 'equi-cubic'
+
+img = Magick::Image.read ARGV[0]
+fn = File.basename(ARGV[0], '.*')
+ext = File.extname(ARGV[0])
+t = Transformer.new 
+faces = t.transform img
+faces[:FACE_X_POS].write "#{fn}_f#{ext}"

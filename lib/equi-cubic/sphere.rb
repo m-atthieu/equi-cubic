@@ -31,50 +31,30 @@ class Sphere
         return sol[:d] >= 0
     end
 
-    private
-    def old_solve_line line
-        r = {
-            :a => ((line.p2.x - line.p1.x) ** 2 +
-                (line.p2.y - line.p1.y) ** 2 +
-                (line.p2.z - line.p1.z) ** 2),
-            :b => (2 * (
-                    line.p2.x - line.p1.x * line.p1.x - @origin.x +
-                    line.p2.y - line.p1.y * line.p1.y - @origin.y +
-                    line.p2.z - line.p1.z * line.p1.z - @origin.z)),
-            :c => (line.p1.x ** 2 + line.p1.y ** 2 + line.p1.z ** 2 +
-                @origin.x ** 2 + @origin.y ** 2 + @origin.z ** 2 -
-                2 * (
-                    line.p1.x * @origin.x +
-                    line.p1.y * @origin.y +
-                    line.p1.z * @origin.z) - @radius ** 2)
-        }
-        r[:d] = r[:b] ** 2 - 4 * r[:a] * r[:c]
-        return r
+    def to_lonlat point
+        rho = @origin.distance point
+        phi = Math.acos(point.z / rho)
+        theta = Math.acos(point.x / Math.sqrt(point.x ** 2 + point.y ** 2))
+        if point.y >= 0 then
+            theta = theta + Math::PI
+        else
+            theta = Math::PI - theta
+        end
+        return theta / (2 * Math::PI), phi / Math::PI
     end
 
-    def old2_solve_line line
-        r = line.p1.to_v
-        o = line.p2.to_v
-        s = @origin.to_v - o
-        sol = {
-            :a => (r.dot r),
-            :b => (-2 * s.dot(r)),
-            :c => (s.dot(s) - Math.sqrt(@radius)) }
-        sol[:d] = sol[:b] ** 2 - 4 * sol[:a] * sol[:c]
-        return sol
-    end
-    
+    private
     def solve_line line
-      u = line.vecteur_directeur
-      pa = line.p1
-      a = u.x ** 2 + u.y ** 2 + u.z ** 2
-      b = - 2 * u.x * @origin.x + 2 * u.x * pa.x - 2 * u.y * @origin.y + 2 * u.y * pa.y - 2 * u.z * @origin.z + 2 * u.z * pa.z
-      c = pa.x ** 2 + pa.y ** 2 + pa.z ** 2 + @origin.x ** 2 + @origin.y ** 2 + @origin.z ** 2 - 2 * pa.x * @origin.x - 2 * pa.y * @origin.y - 2 * pa.z * @origin.z - @radius ** 2
-      return {
-        :a => a,
-        :b => b,
-        :c => c,
-        :d => b ** 2 - 4 * a * c
-      }
+        u = line.vecteur_directeur
+        pa = line.p1
+        a = u.x ** 2 + u.y ** 2 + u.z ** 2
+        b = - 2 * u.x * @origin.x + 2 * u.x * pa.x - 2 * u.y * @origin.y + 2 * u.y * pa.y - 2 * u.z * @origin.z + 2 * u.z * pa.z
+        c = pa.x ** 2 + pa.y ** 2 + pa.z ** 2 + @origin.x ** 2 + @origin.y ** 2 + @origin.z ** 2 - 2 * pa.x * @origin.x - 2 * pa.y * @origin.y - 2 * pa.z * @origin.z - @radius ** 2
+        return {
+            :a => a,
+            :b => b,
+            :c => c,
+            :d => b ** 2 - 4 * a * c
+        }
     end
 end

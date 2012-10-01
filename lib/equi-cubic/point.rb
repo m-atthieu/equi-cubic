@@ -12,4 +12,12 @@ class Point
     def to_v
         return Vector.new self
     end
+    
+    def * term
+        return Point.new @x * term, @y * term, @z * term
+    end
+    
+    def distance o
+        return Math.sqrt((@x - o.x) ** 2 + (@y - o.y) ** 2 + (@z - o.z) ** 2)
+    end
 end
