@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# -*- mode: ruby -*-
 
 $:.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
 
@@ -6,16 +7,18 @@ require 'rubygems'
 require 'rmagick'
 require 'equi-cubic'
 
-img = Magick::Image.read ARGV[0]
-fn = File.basename(ARGV[0], '.*')
-ext = File.extname(ARGV[0])
-t = Transformer.new 
-faces = t.transform img
-{:FACE_X_POS => 'f',
-    :FACE_X_NEG => 'b', 
-    :FACE_Y_POS => 'r', 
-    :FACE_Y_NEG => 'l', 
+ARGV.each do |filename|
+  img = Magick::Image.read filename
+  fn = File.basename filename, '.*'
+  ext = File.extname filename
+  t = Transformer.new
+  faces = t.transform img
+  { :FACE_X_POS => 'f',
+    :FACE_X_NEG => 'b',
+    :FACE_Y_POS => 'r',
+    :FACE_Y_NEG => 'l',
     :FACE_Z_POS => 'u',
     :FACE_Z_NEG => 'd'}.each do |f, n|
-        faces[f].write "#{fn}_#{n}#{ext}"
-    end
+    faces[f].write "#{fn}_#{n}#{ext}"
+  end
+end
