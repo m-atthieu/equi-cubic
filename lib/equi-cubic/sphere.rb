@@ -35,8 +35,8 @@ class Sphere
         rho = @origin.distance point
         phi = Math.acos(point.z / rho)
         theta = Math.acos(point.x / Math.sqrt(point.x ** 2 + point.y ** 2))
-        if point.y >= 0 then
-            theta = theta + Math::PI
+        if point.y < 0 then
+          theta = theta + Math::PI
         else
             theta = Math::PI - theta
         end
