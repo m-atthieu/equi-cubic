@@ -15,8 +15,8 @@ ARGV.each do |filename|
   faces = t.transform img
   { :FACE_X_POS => 'f',
     :FACE_X_NEG => 'b',
-    :FACE_Y_POS => 'r',
-    :FACE_Y_NEG => 'l',
+    :FACE_Y_POS => 'l',
+    :FACE_Y_NEG => 'r',
     :FACE_Z_POS => 'u',
     :FACE_Z_NEG => 'd'}.each do |f, n|
     faces[f].write "#{fn}_#{n}#{ext}"
