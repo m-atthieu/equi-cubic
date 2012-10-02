@@ -9,20 +9,20 @@ require 'equicubic'
 
 f = ARGV.select { |fn| fn =~ /_f\....$/ }
 ext = File.extname f.first
-base = File.basename f.first, "_f.#{ext}"
+base = File.basename f.first, "_f#{ext}"
 l = ARGV.select { |fn| fn =~ /_l\....$/ }
 b = ARGV.select { |fn| fn =~ /_b\....$/ }
 r = ARGV.select { |fn| fn =~ /_r\....$/ }
 u = ARGV.select { |fn| fn =~ /_u\....$/ }
 d = ARGV.select { |fn| fn =~ /_d\....$/ }
-faces = { 
-    :FACE_X_POS => Magick::Image.read f.first,
-    :FACE_X_NEG => Magick::Image.read b.first,
-    :FACE_Y_POS => Magick::Image.read l.first,
-    :FACE_Y_NEG => Magick::Image.read r.first,
-    :FACE_Z_POS => Magick::Image.read u.first,
-    :FACE_Z_NEG => Magick::Image.read d.first
+faces = {
+    :FACE_X_POS => Magick::Image.read(f.first),
+    :FACE_X_NEG => Magick::Image.read(b.first),
+    :FACE_Y_POS => Magick::Image.read(l.first),
+    :FACE_Y_NEG => Magick::Image.read(r.first),
+    :FACE_Z_POS => Magick::Image.read(u.first),
+    :FACE_Z_NEG => Magick::Image.read(d.first)
 }
 t = Transformer.new
 equi = t.cubic_equi faces
-equi.write "#{base}.#{ext}"
+equi.write "#{base}#{ext}"

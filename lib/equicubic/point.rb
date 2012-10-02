@@ -17,5 +17,9 @@ class Point
         return Point.new @x * term, @y * term, @z * term
     end
 
-    alias :distance :distance2
+    def distance
+      Math.sqrt(@x * @x + @y * @y + @z * @z)
+    end
+
+    #alias :distance :distance2
 end
