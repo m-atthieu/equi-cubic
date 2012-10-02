@@ -1,4 +1,4 @@
-class Face < Plan
+class Face
     attr_reader :size
     def initialize point, size
         @center = point

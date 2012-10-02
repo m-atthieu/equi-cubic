@@ -1,6 +1,5 @@
 require 'equi-cubic/point'
 require 'equi-cubic/sphere'
-require 'equi-cubic/plan'
 require 'equi-cubic/cube'
 require 'equi-cubic/face'
 require 'equi-cubic/transformer'
