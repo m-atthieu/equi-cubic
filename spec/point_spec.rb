@@ -19,17 +19,15 @@ describe Point do
     
     describe "#distance" do
         it "returns the distance to the origin (0, 0, 0)" do
-      p1 = Point.new 0, 0, 0
             p2 = Point.new 2, 0, 0
             expect = 2
-            p2.distance(p1).should == expect
+            p2.distance.should == expect
         end
         
         it "should return the distance between two points anywhere" do
-            p1 = Point.new 0, 0, 0
-            p2 = Point.new 2, 2, 2
+      p2 = Point.new 2, 2, 2
             expect = 2 * Math.sqrt(3)
-            p2.distance(p1).should == expect
+            p2.distance.should == expect
         end
     end
 end
