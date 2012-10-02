@@ -19,13 +19,7 @@ class Transformer
             (0..xp.rows).each do |x|
                 (0..xp.columns).each do |y|
                     p = f.to_p x, y
-                    l = Line.new o, p
-                    sols = s.intersection_line l
-                    if(p.distance(sols[0]) < p.distance(sols[1])) then
-                        lon, lat = s.to_lonlat sols[0]
-                    else
-                        lon, lat = s.to_lonlat sols[1]
-                    end
+                    lon, lat = s.to_lonlat p
                     xp.pixel_color x, y, image.first.pixel_color(lon * image.first.columns, lat * image.first.rows)
                 end
             end
