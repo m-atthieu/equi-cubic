@@ -8,6 +8,6 @@ rescue Bundler::BundlerError => e
 end
 
 $LOAD_PATH.unshift(File.dirname(__FILE__) + '/../../lib')
-require 'equi-cubic'
+require 'equicubic'
 
 require 'rspec/expectations'

@@ -5,7 +5,7 @@ $:.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
 
 require 'rubygems'
 require 'rmagick'
-require 'equi-cubic'
+require 'equicubic'
 
 ARGV.each do |filename|
   img = Magick::Image.read filename
