@@ -3,29 +3,54 @@ class Face < Plan
     def initialize point, size
         @center = point
         @size = size
+        @s = size / 2
+        switch_to_p
     end
     
-    def to_p x, y
-        s = @size / 2
+    def switch_to_p
         if @center.x != 0 then
           if @center.x >= 0 then
-            return Point.new s, s - x, s - y
+              alias :to_p xp_to_p
           else
-            return Point.new -s, -s + x, s - y
+              alias :to_p xn_to_p
           end
         elsif @center.y != 0 then
           if @center.y >= 0 then
-            return Point.new -s + x, s, s - y
+              alias :to_p yp_to_p
           else
-            return Point.new s - x, -s, s - y
+            alias :to_p yn_to_p
           end
         else
           if @center.z >= 0 then
-            return Point.new -s + y, s - x, s
+              alias :to_p zp_to_p
           else
-            return Point.new s - y, s - x, -s
+            alias :to_p zn_to_p
           end
         end
+    end
+    
+    def xp_to_p x, y
+        return Point.new @s, @s - x, @s - y
+    end
+    
+    def xn_to_p x, y
+        return Point.new -@s, -@s + x, @s - y
+    end
+    
+    def yp_to_p x, y
+        return Point.new -@s + x, @s, @s - y
+    end
+    
+    def yn_to_p x, y
+        return Point.new @s - x, -@s, @s - y
+    end
+    
+    def zp_to_p x, y
+        return Point.new -@s + y, @s - x, @s
+    end
+    
+    def zn_to_p x, y
+        return Point.new @s - y, @s - x, -@s
     end
     
     @@face_point = {
