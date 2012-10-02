@@ -5,7 +5,7 @@ class Sphere
     end
 
     def to_lonlat point
-        rho = @origin.distance point
+        rho = point.distance @origin
         phi = Math.acos(point.z / rho)
         theta = Math.acos(point.x / Math.sqrt(point.x ** 2 + point.y ** 2))
         if point.y < 0 then

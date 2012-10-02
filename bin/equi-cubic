@@ -12,7 +12,7 @@ ARGV.each do |filename|
   fn = File.basename filename, '.*'
   ext = File.extname filename
   t = Transformer.new
-  faces = t.transform img
+  faces = t.equi_cubic img
   { :FACE_X_POS => 'f',
     :FACE_X_NEG => 'b',
     :FACE_Y_POS => 'l',

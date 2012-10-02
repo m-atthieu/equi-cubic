@@ -18,6 +18,7 @@ class Point
     end
     
     def distance o
-        return Math.sqrt((@x - o.x) * (@x - o.x) + (@y - o.y) * (@y - o.y) + (@z - o.z) * (@z - o.z))
+        return Math.sqrt(@x * @x + @y * @y + @z*@z)
+        #return Math.sqrt((@x - o.x) * (@x - o.x) + (@y - o.y) * (@y - o.y) + (@z - o.z) * (@z - o.z))
     end
 end
