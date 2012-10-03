@@ -1,11 +1,17 @@
 #include <ruby.h>
 #include <math.h>
 
-static VALUE sphere_to_lonlat(VALUE self, VALUE x, VALUE y, VALUE z, VALUE distance)
+static VALUE sphere_to_lonlat(VALUE self, VALUE point)
 {
-    double _x = NUM2DBL(x), _y = NUM2DBL(y), _z = NUM2DBL(z), _d = NUM2DBL(distance);
+    ID distance_m = rb_intern("distance_c");
+    VALUE distance = rb_funcall(point, distance_m, 0);
+	
+    double _x = NUM2DBL(rb_iv_get(point, "@x")), 
+	_y = NUM2DBL(rb_iv_get(point, "@y")), 
+	_z = NUM2DBL(rb_iv_get(point, "@z")), 
+	_d = NUM2DBL(distance);
     VALUE arr = rb_ary_new2(2);
-    double phi = acos(z / distance);
+    double phi = acos(_z / _d);
     double theta = acos(_x / sqrt(_x * _x + _y * _y));
     if(_y < 0){
 	theta = theta + M_PI;
@@ -28,7 +34,7 @@ static VALUE point_distance(VALUE self)
 void Init_c_ext(void)
 {
 	VALUE sphere = rb_define_class("Sphere", rb_cObject);
-	rb_define_method(sphere, "to_lonlat_c", sphere_to_lonlat, 4);
+	rb_define_method(sphere, "to_lonlat_c", sphere_to_lonlat, 1);
 
 	VALUE point = rb_define_class("Point", rb_cObject);
 	rb_define_method(point, "distance_c", point_distance, 0);
