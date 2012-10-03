@@ -5,11 +5,12 @@ class Sphere
   end
 
   def to_lonlat point
-    phi = Math.acos(point.z / point.distance)
+    phi = Math.acos(point.z / point.distance_c)
+    theta = Math.acos(point.x / Math.sqrt(point.x * point.x + point.y * point.y))
     if point.y < 0 then
-        theta = Math::PI - Math.acos(point.x / Math.sqrt(point.x * point.x + point.y * point.y))
+        theta = Math::PI + theta
     else
-        theta = Math::PI + Math.acos(point.x / Math.sqrt(point.x * point.x + point.y * point.y))
+        theta = Math::PI - theta
     end
     return theta / (2 * Math::PI), phi / Math::PI
   end
@@ -17,19 +18,21 @@ class Sphere
   def to_p lon, lat
     rho = @radius
     phi = lat * Math::PI
-    theta = 2 * Math::PI * lon
-    if theta >= Math::PI then
-        theta += Math::PI
+    if lon < 0.5 then
+      theta = 2 * Math::PI * (lon)
+    elsif lon > 0.5 then
+      theta = 2 * Math::PI * (lon - 1)
     else
-        theta -= Math::PI
+      theta = 0
     end
-    #puts "#{lon}, #{lat} : #{rho}, #{phi}, #{theta}"
+    #puts "\n#{lon}, #{lat} :\n\trho : #{rho}, phi : #{phi}, theta : #{theta}"
+    #puts "\tsin(phi) : #{Math.sin(phi)}, cos(theta) : #{Math.cos(theta)}"
     x = rho * Math.sin(phi) * Math.cos(theta)
     y = rho * Math.sin(phi) * Math.sin(theta)
     z = rho * Math.cos(phi)
     p = Point.new x, y, z
-    #puts "#{x}, #{y}, #{z}"
     max = [x.abs, y.abs, z.abs].max
+    #puts "\tx: #{x}, y: #{y}, z: #{z} (max: #{max})"
     if max == x.abs then
         coeff = @radius / x.abs
     elsif max == y.abs then
