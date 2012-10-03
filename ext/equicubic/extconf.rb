@@ -1,3 +1,3 @@
 require 'mkmf'
 
-create_makefile('equicubic/to_lonlat')
+create_makefile('equicubic/c_ext')

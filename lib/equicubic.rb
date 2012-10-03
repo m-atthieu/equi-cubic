@@ -1,5 +1,5 @@
 $: << File.dirname(__FILE__) + '/../ext'
-require 'equicubic/to_lonlat'
+require 'equicubic/c_ext'
 require 'equicubic/point'
 require 'equicubic/sphere'
 require 'equicubic/cube'
