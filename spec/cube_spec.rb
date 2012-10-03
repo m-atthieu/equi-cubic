@@ -23,4 +23,14 @@ describe Cube do
             face.should be_an_instance_of Face
         end
     end
+    
+    describe "#face_name_from_point p" do
+        it "should return :FACE_X_POS for (1, 0, 0)" do
+            @instance.face_name_from_point(Point.new(1, 0, 0)).should == :FACE_X_POS
+        end
+        
+        it "should return :FACE_Y_NEG for (0, -1, 0)" do
+            @instance.face_name_from_point(Point.new(0, -1, 0)).should == :FACE_Y_NEG
+        end
+    end
 end

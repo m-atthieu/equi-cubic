@@ -23,11 +23,25 @@ describe Point do
             expect = 2
             p2.distance.should == expect
         end
-    
-        it "should return the distance to the origin (0, 0, 0)" do
+    it "should return the distance to the origin (0, 0, 0)" do
       p2 = Point.new 2, 2, 2
-            expect = 2 * Math.sqrt(3)
-            p2.distance.should == expect
-        end
+      expect = 2 * Math.sqrt(3)
+      p2.distance.should == expect
     end
+  end
+
+  describe "#distance_c" do
+    it "returns the distance to the origin (0, 0, 0)" do
+      p2 = Point.new 2, 0, 0
+      expect = 2
+      p2.distance_c.should == expect
+    end
+
+    it "should return the distance to the origin (0, 0, 0)" do
+      p2 = Point.new 2, 2, 2
+      expect = 2 * Math.sqrt(3)
+      p2.distance_c.should == expect
+    end
+  end
+
 end
