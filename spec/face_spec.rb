@@ -106,7 +106,7 @@ describe Face do
       it "should return bottom left correctly"  do check_uv face, 0, 2, d end
       it "should return bottom right correctly" do check_uv face, 2, 2, c end
     end
-
+    
     context "with :FACE_X_NEG" do
       let(:face){ Face.new Point.new(-1, 0, 0), 2 }
       it "should return top left correctly"     do check_uv face, 0, 0, e end
@@ -114,7 +114,7 @@ describe Face do
       it "should return bottom left correctly"  do check_uv face, 0, 2, h end
       it "should return bottom right correctly" do check_uv face, 2, 2, g end
     end
-
+    
     context "with :FACE_Y_POS" do
       let(:face){ Face.new Point.new(0, 1, 0), 2 }
       it "should return top left correctly"     do check_uv face, 0, 0, f end

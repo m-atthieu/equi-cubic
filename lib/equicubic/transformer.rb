@@ -38,13 +38,6 @@ class Transformer
           fn = cube.face_name_from_point p
           face = cube.face fn
           u, v = face.to_uv p
-          if((158..162).include?(x) && (78..82).include?(y)) then
-            puts "x: #{x}, y: #{y}"
-            puts "\tlon: #{lon}, lat: #{lat}"
-            puts "\tp: #{p}"
-            puts "\tface: #{fn}"
-            puts "\tu: #{u}, v: #{v}"
-          end
           image.pixel_color x, y, faces[fn].first.pixel_color(u, v)
         end
       end
