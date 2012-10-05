@@ -18,21 +18,16 @@ class Sphere
   def to_p lon, lat
     rho = @radius
     phi = lat * Math::PI
-    if lon < 0.5 then
-      theta = 2 * Math::PI * (lon)
-    elsif lon > 0.5 then
-      theta = 2 * Math::PI * (lon - 1)
+    if lon > 0.5 then
+      theta =  3 * Math::PI - 2 * Math::PI * lon
     else
-      theta = 0
+      theta = Math::PI - 2 * Math::PI * lon
     end
-    #puts "\n#{lon}, #{lat} :\n\trho : #{rho}, phi : #{phi}, theta : #{theta}"
-    #puts "\tsin(phi) : #{Math.sin(phi)}, cos(theta) : #{Math.cos(theta)}"
     x = rho * Math.sin(phi) * Math.cos(theta)
     y = rho * Math.sin(phi) * Math.sin(theta)
     z = rho * Math.cos(phi)
     p = Point.new x, y, z
     max = [x.abs, y.abs, z.abs].max
-    #puts "\tx: #{x}, y: #{y}, z: #{z} (max: #{max})"
     if max == x.abs then
         coeff = @radius / x.abs
     elsif max == y.abs then

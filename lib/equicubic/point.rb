@@ -21,5 +21,9 @@ class Point
       Math.sqrt(@x * @x + @y * @y + @z * @z)
     end
 
+    def to_s
+      "(#{@x}, #{@y}, #{@z})"
+    end
+
     #alias :distance :distance2
 end
