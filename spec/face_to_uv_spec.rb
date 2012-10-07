@@ -4,7 +4,6 @@ describe Face do
     describe "#to_uv" do
         context "with :FACE_X_NEG" do
             let(:face){ Face.new Point.new(-16, 0, 0), 32}
-            
             def check_abcd_order a, b, c, d
                 ua, va = face.to_uv a
                 ub, vb = face.to_uv b
