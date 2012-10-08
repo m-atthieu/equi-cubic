@@ -1,4 +1,9 @@
 class Transformer
+
+  def set_interpolator inter
+    @interpolator = inter
+  end
+
     def equi_cubic image
       image = image.clone
         height = image.first.rows
@@ -17,7 +22,8 @@ class Transformer
                 (0..face_img.columns).each do |y|
                     p = face.to_p x, y
                     lon, lat = sphere.to_lonlat_c p
-                    face_img.pixel_color x, y, image.first.pixel_color(lon * image.first.columns, lat * image.first.rows)
+                    pixel = @interpolator.interpolate_c lon * image.first.columns, lat * image.first.rows
+                    face_img.pixel_color x, y, pixel
                 end
             end
             faces[face_name] = face_img
@@ -34,7 +40,7 @@ class Transformer
       (0..image.columns).each do |x|
         (0..image.rows).each do |y|
           lon, lat = (x * 1.0) / width, (y * 1.0) / height
-          p = sphere.to_p lon, lat
+          p = sphere.to_p_c lon, lat
           fn = cube.face_name_from_point p
           face = cube.face fn
           u, v = face.to_uv p

@@ -11,7 +11,9 @@ ARGV.each do |filename|
   img = Magick::Image.read filename
   fn = File.basename filename, '.*'
   ext = File.extname filename
+  i = Interpolator.factory :bilinear, img
   t = Transformer.new
+  t.set_interpolator i
   faces = t.equi_cubic img
   { :FACE_X_POS => 'f',
     :FACE_X_NEG => 'b',

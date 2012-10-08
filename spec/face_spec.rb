@@ -1,3 +1,5 @@
+require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+
 describe Face do
     before :each do
         @instance = Face.new Point.new(1, 0, 0), 2
