@@ -4,7 +4,6 @@ class Face
         @center = point
         @size = size
         @s = size / 2
-        switch_to_p_uv
     end
 
     def switch_to_p_uv
@@ -43,14 +42,6 @@ class Face
         return @s - p.y, @s - p.z
     end
 
-    def xn_to_p x, y
-        return Point.new -@s, -@s + x, @s - y
-    end
-
-    def xn_to_uv p
-        return p.y + @s, @s - p.z
-    end
-
     def yp_to_p x, y
         return Point.new -@s + x, @s, @s - y
     end
@@ -67,22 +58,6 @@ class Face
         return @s - p.x, @s - p.z
     end
 
-    def zp_to_p x, y
-        return Point.new -@s + y, @s - x, @s
-    end
-
-    def zp_to_uv p
-        return @s - p.y, @s + p.x
-    end
-
-    def zn_to_p x, y
-        return Point.new @s - y, @s - x, -@s
-    end
-
-    def zn_to_uv p
-        return @s - p.y, @s - p.x
-    end
-
     @@face_point = {
         :FACE_X_POS => Point.new( 1,  0,  0),
         :FACE_X_NEG => Point.new(-1,  0,  0),
@@ -93,6 +68,44 @@ class Face
     }
 
     def self.create face, coeff
-        return Face.new @@face_point[face] * coeff, coeff * 2
+        if face == :FACE_X_NEG then
+            Face_x_neg.new @@face_point[face] * coeff, coeff * 2
+        elsif face == :FACE_Z_NEG then
+            Face_z_neg.new @@face_point[face] * coeff, coeff * 2
+        elsif face == :FACE_Z_POS then
+            Face_z_pos.new @@face_point[face] * coeff, coeff * 2
+        else
+            f = Face.new @@face_point[face] * coeff, coeff * 2
+            f.switch_to_p_uv
+            return f
+        end
+    end
+end
+
+class Face_x_neg < Face
+    def to_p x, y
+        return Point.new -@s, -@s + x, @s - y
+    end
+
+    def to_uv p
+        return p.y + @s, @s - p.z
+    end
+end
+
+class Face_z_pos < Face
+    def to_uv p
+       return @s - p.y, @s + p.x
+    end
+    def to_p x, y
+        Point.new -@s + y, @s - x, @s
+    end
+end
+
+class Face_z_neg < Face
+    def to_uv p
+       return @s - p.y, @s - p.x
+    end
+    def to_p x, y
+        Point.new @s - y, @s - x, -@s
     end
 end

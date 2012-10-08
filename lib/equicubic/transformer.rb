@@ -26,14 +26,14 @@ class Transformer
     end
 
     def cubic_equi faces
-      height = ((faces[:FACE_X_POS].first.rows - 1) * 1.0 / 2) * Math::PI
+      height = ((faces[:FACE_X_POS].first.rows + 2) * 1.0 / 2) * Math::PI
       width = 2 * height
-      cube = Cube.new Point.new(0, 0, 0), faces[:FACE_X_POS].first.rows
-      sphere = Sphere.new Point.new(0, 0, 0), faces[:FACE_X_POS].first.rows * 1.0 / 2
+      cube = Cube.new Point.new(0, 0, 0), (height / Math::PI) * 2
+      sphere = Sphere.new Point.new(0, 0, 0), (height / Math::PI)
       image = Magick::Image.new width, height
       (0..image.columns).each do |x|
         (0..image.rows).each do |y|
-          lon, lat = (x * 1.0) / image.columns, (y * 1.0) / image.rows
+          lon, lat = (x * 1.0) / width, (y * 1.0) / height
           p = sphere.to_p lon, lat
           fn = cube.face_name_from_point p
           face = cube.face fn
