@@ -20,7 +20,7 @@ describe Cube do
     describe "#face" do
         it "should take a face symbol and return the said face" do
             face = @instance.face(:FACE_X_POS)
-            face.should be_an_instance_of Face
+            face.should be_a_kind_of Face
         end
     end
 
