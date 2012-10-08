@@ -9,3 +9,5 @@ require 'equicubic/transformer'
 
 require 'equicubic/interpolator'
 require 'equicubic/interpolator/bilinear'
+require 'equicubic/interpolator/bicubic'
+require 'equicubic/interpolator/none'

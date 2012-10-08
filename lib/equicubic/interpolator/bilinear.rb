@@ -1,52 +1,57 @@
 class BilinearInterpolator < Interpolator
+  def set_image image
+    super image
+    @width = @image.columns
+    @height = @image.rows
+  end
+
   def interpolate u, v
-    q11 = u.floor, v.ceil
-    q12 = u.floor, v.floor
-    q22 = u.ceil, v.floor
-    q21 = u.ceil, v.ceil
-    # R1 = ((x2 - x) / (x2 - x1)) * Q11 + ((x - x1) / (x2 - x1)) * Q21
-    # r1 = a * q11 + b * q21
-    # R2 = ((x2 - x) / (x2 - x1)) * Q12 + ((x - x1) / (x2 - x1)) * Q22
-    # r2 = a * q12 + b * q22
-    # P  = ((y2 - y) / (y2 - y1)) *  R1 + ((y - y1) / (y2 - y1)) *  R2
-    # p = c * r1 + d * r2
-    # p = c * a * q11 + c * b * q21 + d * a * q12 + d * b * q22
-    x = u
-    y = v
-    x1 = q11[0]
-    x2 = q21[0]
-    y1 = q11[1]
-    y2 = q22[1]
-    if x1 != x2 then
-      a = (x2 - x) / (x2 - x1)
-      b = (x - x1) / (x2 - x1)
+    qr = extract_r u, v
+    qg = extract_g u, v
+    qb = extract_b u, v
+    if u.floor != u.ceil then
+      a = (u.ceil - u) / (u.ceil - u.floor)
+      b = (u - u.floor) / (u.ceil - u.floor)
     else
       a = 1
       b = 0
     end
-    if y1 != y2 then
-      c = (y2 - y) / (y2 - y1)
-      d = (y - y1) / (y2 - y1)
+    if v.floor != v.ceil then
+      c = (v.ceil - v) / (v.ceil - v.floor)
+      d = (v - v.floor) / (v.ceil - v.floor)
     else
       c = 1
       d = 0
     end
-    #puts @image.pixel_color(x1, y1).red
-    #puts "x1:#{x1}, x2:#{x2}, y1:#{y1}, y2:#{y2}"
-    #puts "a:#{a}, b:#{b}, c:#{c}, d:#{d}"
-    _r  = c * a * @image.pixel_color(x1, y1).red
-    _r += c * b * @image.pixel_color(x2, y1).red
-    _r += d * a * @image.pixel_color(x1, y2).red
-    _r += d * b * @image.pixel_color(x2, y2).red
-    _g  = c * a * @image.pixel_color(x1, y1).green
-    _g += c * b * @image.pixel_color(x2, y1).green
-    _g += d * a * @image.pixel_color(x1, y2).green
-    _g += d * b * @image.pixel_color(x2, y2).green
-    _b  = c * a * @image.pixel_color(x1, y1).blue
-    _b += c * b * @image.pixel_color(x2, y1).blue
-    _b += d * a * @image.pixel_color(x1, y2).blue
-    _b += d * b * @image.pixel_color(x2, y2).blue
-    #puts "#{_r}, #{_g}, #{_b}"
-    Magick::Pixel.new _r, _g, _b, 255
+    _r = c * a * qr[0][0] + c * b * qr[0][1] + d * a * qr[1][0] + d * b * qr[1][1]
+    _g = c * a * qg[0][0] + c * b * qg[0][1] + d * a * qg[1][0] + d * b * qg[1][1]
+    _b = c * a * qb[0][0] + c * b * qb[0][1] + d * a * qb[1][0] + d * b * qb[1][1]
+    return Magick::Pixel.new _r, _g, _b, 255
+  end
+
+private
+  def extract_r u, v
+    extract(u, v).map{ |i| i.map{ |j| j.red } }
+  end
+
+  def extract_g u, v
+    extract(u, v).map{ |i| i.map{ |j| j.green } }
+  end
+
+  def extract_b u, v
+    extract(u, v).map{ |i| i.map{ |j| j.blue } }
+  end
+
+  def extract u, v
+    [
+      [
+        @image.pixel_color(u.floor, v.floor),
+        @image.pixel_color(u.ceil % @width, v.floor)
+      ],
+      [
+        @image.pixel_color(u.floor, v.ceil),
+        @image.pixel_color(u.ceil % @width, v.ceil)
+      ]
+    ]
   end
 end

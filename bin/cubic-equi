@@ -22,7 +22,18 @@ faces = {
     :FACE_Z_NEG => Magick::Image.read(d.first)
 }
 
+method = :bilinear
+interpolators = {
+    :FACE_X_POS => Interpolator.factory(method, faces[:FACE_X_POS]),
+    :FACE_X_NEG => Interpolator.factory(method, faces[:FACE_X_NEG]),
+    :FACE_Y_POS => Interpolator.factory(method, faces[:FACE_Y_POS]),
+    :FACE_Y_NEG => Interpolator.factory(method, faces[:FACE_Y_NEG]),
+    :FACE_Z_POS => Interpolator.factory(method, faces[:FACE_Z_POS]),
+    :FACE_Z_NEG => Interpolator.factory(method, faces[:FACE_Z_NEG])
+}
+
 t = Transformer.new
+t.set_interpolator interpolators
 equi = t.cubic_equi faces
 
 ext = File.extname f.first
