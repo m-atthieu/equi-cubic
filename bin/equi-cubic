@@ -6,16 +6,34 @@ $:.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
 require 'rubygems'
 require 'rmagick'
 require 'equicubic'
+require 'getopt/long'
+
+def get_options
+  options = Getopt::Long.getopts(
+                         ["--bilinear", "-l", GetoptLong::NO_ARGUMENT],
+                         ["--bicubic" , "-c", GetoptLong::NO_ARGUMENT],
+                         ["--none"    , "-n", GetoptLong::NO_ARGUMENT])
+  defaults = { :interpolation => :bilinear }
+  options.each do |option|
+    case option
+      when '--bilinear'
+      defaults[:interpolation] = :bilinear
+      when '--bicubic'
+      defaults[:interpolation] = :bicubic
+      when '--none'
+      defaults[:interpolation] = :none
+  end
+end
+
+options = get_options
 
 ARGV.each do |filename|
   img = Magick::Image.read filename
   fn = File.basename filename, '.*'
   ext = File.extname filename
-  bilinear = Interpolator.factory :bilinear, img
-  bicubic = Interpolator.factory :bicubic, img
-  none = Interpolator.factory :none, img
+    interpolator = Interpolator.factory options[:interpolation], img
   t = Transformer.new
-  t.set_interpolator bilinear
+  t.set_interpolator interpolator
   faces = t.equi_cubic img
   { :FACE_X_POS => 'f',
     :FACE_X_NEG => 'b',
