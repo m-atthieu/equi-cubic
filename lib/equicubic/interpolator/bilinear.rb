@@ -6,9 +6,7 @@ class BilinearInterpolator < Interpolator
   end
 
   def interpolate u, v
-    qr = extract_r u, v
-    qg = extract_g u, v
-    qb = extract_b u, v
+      q = extract u, v
     if u.floor != u.ceil then
       a = (u.ceil - u) / (u.ceil - u.floor)
       b = (u - u.floor) / (u.ceil - u.floor)
@@ -23,9 +21,9 @@ class BilinearInterpolator < Interpolator
       c = 1
       d = 0
     end
-    _r = c * a * qr[0][0] + c * b * qr[0][1] + d * a * qr[1][0] + d * b * qr[1][1]
-    _g = c * a * qg[0][0] + c * b * qg[0][1] + d * a * qg[1][0] + d * b * qg[1][1]
-    _b = c * a * qb[0][0] + c * b * qb[0][1] + d * a * qb[1][0] + d * b * qb[1][1]
+    _r = c * a * q[0][0].red + c * b * q[0][1].red + d * a * q[1][0].red + d * b * q[1][1].red
+    _g = c * a * q[0][0].green + c * b * q[0][1].green + d * a * q[1][0].green + d * b * q[1][1].green
+    _b = c * a * q[0][0].blue + c * b * q[0][1].blue + d * a * q[1][0].blue + d * b * q[1][1].blue
     return Magick::Pixel.new _r, _g, _b, 255
   end
 
@@ -43,15 +41,13 @@ private
   end
 
   def extract u, v
-    [
+      uf = u.floor
+      uc = u.ceil % @width
+      vf = v.floor
+      vc = v.ceil
       [
-        @image.pixel_color(u.floor, v.floor),
-        @image.pixel_color(u.ceil % @width, v.floor)
-      ],
-      [
-        @image.pixel_color(u.floor, v.ceil),
-        @image.pixel_color(u.ceil % @width, v.ceil)
+          [ @image.pixel_color(uf, vf), @image.pixel_color(uc, vf) ],
+          [ @image.pixel_color(uf, vc), @image.pixel_color(uc, vc) ]
       ]
-    ]
-  end
+    end
 end
