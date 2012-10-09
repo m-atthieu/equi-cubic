@@ -6,15 +6,15 @@ $:.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
 require 'rubygems'
 require 'rmagick'
 require 'equicubic'
-require 'getopt/long'
+require 'getoptlong'
 
 def get_options
-  options = Getopt::Long.getopts(
-                         ["--bilinear", "-l", GetoptLong::NO_ARGUMENT],
-                         ["--bicubic" , "-c", GetoptLong::NO_ARGUMENT],
-                         ["--none"    , "-n", GetoptLong::NO_ARGUMENT])
-  defaults = { :interpolation => :bilinear }
-  options.each do |option|
+  options = GetoptLong.new(
+                       ["--bilinear", "-l", GetoptLong::NO_ARGUMENT],
+                       ["--bicubic" , "-c", GetoptLong::NO_ARGUMENT],
+                       ["--none"    , "-n", GetoptLong::NO_ARGUMENT])
+  defaults = { :interpolation => :bilinear, :filenames => [] }
+  options.each do |option, value|
     case option
       when '--bilinear'
       defaults[:interpolation] = :bilinear
@@ -22,12 +22,17 @@ def get_options
       defaults[:interpolation] = :bicubic
       when '--none'
       defaults[:interpolation] = :none
+    end
   end
+  while ARGV.length >= 1 do
+    defaults[:filenames] << ARGV.shift
+  end
+  return defaults
 end
 
 options = get_options
 
-ARGV.each do |filename|
+options[:filenames].each do |filename|
   img = Magick::Image.read filename
   fn = File.basename filename, '.*'
   ext = File.extname filename
