@@ -11,7 +11,7 @@ class BilinearInterpolator < Interpolator
       @image.pixel_color(w, height, @image.pixel_color(width - w - 1, height - 1))
     end
     @image.pixel_color(width, height, @image.pixel_color(0, height - 1))
-    @image.write("interpolator.png")
+    # @image.write("interpolator.png")
   end
 
   # interpolate/interpolate_c in c_ext.c
