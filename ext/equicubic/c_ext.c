@@ -103,9 +103,8 @@ VALUE bilinear_interpolate(VALUE self, VALUE u, VALUE v)
 	green = rb_intern("green"),
 	blue = rb_intern("blue");
     VALUE _image = rb_iv_get(self, "@image");
-    // à modifier pour vc > _height
-    int q00x = uf, q00y = vf, q01x = uc % _width, q01y = vf,
-	q10x = uf, q10y = vc, q11x = uc % _width, q11y = vc;
+    int q00x = uf, q00y = vf, q01x = uc, q01y = vf,
+	q10x = uf, q10y = vc, q11x = uc, q11y = vc;
     VALUE q00 = rb_funcall(_image, pixel_color, 2, INT2FIX(q00x), INT2FIX(q00y)),
 	q01 = rb_funcall(_image, pixel_color, 2, INT2FIX(q01x), INT2FIX(q01y)),
 	q10 = rb_funcall(_image, pixel_color, 2, INT2FIX(q10x), INT2FIX(q10y)),

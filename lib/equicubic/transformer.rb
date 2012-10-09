@@ -22,7 +22,8 @@ class Transformer
                 (0..face_img.columns).each do |y|
                     p = face.to_p x, y
                     lon, lat = sphere.to_lonlat_c p
-                    pixel = @interpolator.interpolate_c lon * image.first.columns, lat * image.first.rows
+                    u, v = lon * image.first.columns, lat * image.first.rows
+                    pixel = @interpolator.interpolate_c u, v
                     face_img.pixel_color x, y, pixel
                 end
             end
