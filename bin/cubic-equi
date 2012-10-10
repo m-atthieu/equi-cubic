@@ -6,36 +6,54 @@ $:.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
 require 'rubygems'
 require 'rmagick'
 require 'equicubic'
+require 'getoptlong'
 
-f = ARGV.select { |fn| fn =~ /_f\....$/ }
-l = ARGV.select { |fn| fn =~ /_l\....$/ }
-b = ARGV.select { |fn| fn =~ /_b\....$/ }
-r = ARGV.select { |fn| fn =~ /_r\....$/ }
-u = ARGV.select { |fn| fn =~ /_u\....$/ }
-d = ARGV.select { |fn| fn =~ /_d\....$/ }
+def get_options
+  options = GetoptLong.new(
+                       ['--none', '-n', GetoptLong::NO_ARGUMENT],
+                       ['--bilinear', '-l', GetoptLong::NO_ARGUMENT],
+                       ['--bicubic', '-c', GetoptLong::NO_ARGUMENT])
+  defaults = { :interpolation => :bilinear, :filenames => [] }
+  options.each  do |option, value|
+    case
+      when '--none'
+      defaults[:interpolation] = :none
+      when '--bilinear'
+      defaults[:interpolation] = :bilinear
+      when '--bicubic'
+      defaults[:interpolation] = :bicubic
+    end
+  end
+  while ARGV.length >= 1 do
+    defaults[:filenames] << ARGV.shift
+  end
+  return defaults
+end
+
+options = get_options
+
+f = options[:filenames].select{ |fn| fn =~ /_f\....$/ }.first
+l = options[:filenames].select{ |fn| fn =~ /_l\....$/ }.first
+b = options[:filenames].select{ |fn| fn =~ /_b\....$/ }.first
+r = options[:filenames].select{ |fn| fn =~ /_r\....$/ }.first
+u = options[:filenames].select{ |fn| fn =~ /_u\....$/ }.first
+d = options[:filenames].select{ |fn| fn =~ /_d\....$/ }.first
+
 faces = {
-    :FACE_X_POS => Magick::Image.read(f.first),
-    :FACE_X_NEG => Magick::Image.read(b.first),
-    :FACE_Y_POS => Magick::Image.read(l.first),
-    :FACE_Y_NEG => Magick::Image.read(r.first),
-    :FACE_Z_POS => Magick::Image.read(u.first),
-    :FACE_Z_NEG => Magick::Image.read(d.first)
+  :FACE_X_POS => Magick::Image.read(f).first,
+  :FACE_X_NEG => Magick::Image.read(b).first,
+  :FACE_Y_POS => Magick::Image.read(l).first,
+  :FACE_Y_NEG => Magick::Image.read(r).first,
+  :FACE_Z_POS => Magick::Image.read(u).first,
+  :FACE_Z_NEG => Magick::Image.read(d).first
 }
 
-method = :bilinear
-interpolators = {
-    :FACE_X_POS => Interpolator.factory(method, faces[:FACE_X_POS]),
-    :FACE_X_NEG => Interpolator.factory(method, faces[:FACE_X_NEG]),
-    :FACE_Y_POS => Interpolator.factory(method, faces[:FACE_Y_POS]),
-    :FACE_Y_NEG => Interpolator.factory(method, faces[:FACE_Y_NEG]),
-    :FACE_Z_POS => Interpolator.factory(method, faces[:FACE_Z_POS]),
-    :FACE_Z_NEG => Interpolator.factory(method, faces[:FACE_Z_NEG])
-}
+interpolator = CubicToEqui::Interpolator.factory options[:interpolation], faces
 
 t = Transformer.new
-t.set_interpolator interpolators
+t.set_interpolator interpolator
 equi = t.cubic_equi faces
 
-ext = File.extname f.first
-base = File.basename f.first, "_f#{ext}"
+ext = File.extname f
+base = File.basename f, "_f#{ext}"
 equi.write "#{base}#{ext}"

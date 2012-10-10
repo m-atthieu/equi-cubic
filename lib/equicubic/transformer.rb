@@ -33,7 +33,7 @@ class Transformer
     end
 
     def cubic_equi faces
-      height = ((faces[:FACE_X_POS].first.rows) * 1.0 / 2) * Math::PI
+      height = ((faces[:FACE_X_POS].rows) * 1.0 / 2) * Math::PI
       width = 2 * height
       cube = Cube.new Point.new(0, 0, 0), (height / Math::PI) * 2
       sphere = Sphere.new Point.new(0, 0, 0), (height / Math::PI)

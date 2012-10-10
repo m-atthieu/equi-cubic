@@ -36,7 +36,7 @@ options[:filenames].each do |filename|
   img = Magick::Image.read filename
   fn = File.basename filename, '.*'
   ext = File.extname filename
-    interpolator = Interpolator.factory options[:interpolation], img
+    interpolator = EquiToCubic::Interpolator.factory options[:interpolation], img
   t = Transformer.new
   t.set_interpolator interpolator
   faces = t.equi_cubic img

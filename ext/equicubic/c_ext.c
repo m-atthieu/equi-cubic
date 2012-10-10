@@ -137,7 +137,14 @@ void Init_c_ext(void)
 	point_class = rb_define_class("Point", rb_cObject);
 	rb_define_method(point_class, "distance_c", point_distance, 0);
 
-	VALUE interpolator_class = rb_define_class("Interpolator", rb_cObject);
-	VALUE bilinear_class = rb_define_class("BilinearInterpolator", interpolator_class);
-	rb_define_method(bilinear_class, "interpolate_c", bilinear_interpolate, 2);
+	VALUE equitocubic_module = rb_define_module("EquiToCubic");
+	VALUE interpolator_class_ec = rb_define_class_under(equitocubic_module, "Interpolator", rb_cObject);
+	VALUE bilinear_class_ec = rb_define_class_under(equitocubic_module, "BilinearInterpolator", interpolator_class_ec);
+	rb_define_method(bilinear_class_ec, "interpolate_c", bilinear_interpolate, 2);
+
+	VALUE cubictoequi_module = rb_define_module("CubicToEqui");
+	VALUE interpolator_class_ce = rb_define_class_under(cubictoequi_module, "Interpolator", rb_cObject);
+	VALUE bilinear_class_ce = rb_define_class_under(cubictoequi_module, "BilinearInterpolator", interpolator_class_ce);
+	rb_define_method(bilinear_class_ce, "interpolate_c", bilinear_interpolate, 2);
+
 }

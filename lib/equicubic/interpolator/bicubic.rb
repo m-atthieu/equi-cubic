@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-class BicubicInterpolator < Interpolator
+class BicubicInterpolator
   def interpolate u, v
     p  = extract u, v
     pr = p.map{ |i| i.map{ |pi| pi.red   } }
